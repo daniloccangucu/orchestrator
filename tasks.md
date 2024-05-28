@@ -16,10 +16,6 @@ Here's a detailed plan to complete the Orchestrator project in 5 days, incorpora
    - Verify that you have the Docker images for billing-app, billing-database, inventory-app, inventory-database, RabbitMQ, and API Gateway.
    - Push these images to Docker Hub to make them accessible for Kubernetes.
 
-4. **Create Docker Compose File (2 hours):**
-   - Draft a `docker-compose.yml` file to ensure all services can run together.
-   - Test the Docker Compose setup to ensure all services are running correctly.
-
 #### Day 2: Kubernetes Cluster Setup
 
 1. **Set Up K3s Cluster (3 hours):**
@@ -49,21 +45,7 @@ Here's a detailed plan to complete the Orchestrator project in 5 days, incorpora
    - Ensure RabbitMQ is correctly set up and integrated with billing-app.
    - Verify that the API Gateway is routing requests properly to the respective services.
 
-#### Day 4: Monitoring, Logging, and Security
-
-1. **Set Up Centralized Logging (3 hours):**
-   - Implement a centralized logging system using tools like ELK stack.
-   - Ensure all services are configured to send logs to the centralized system.
-
-2. **Implement Monitoring (4 hours):**
-   - Set up Prometheus and Grafana for monitoring the cluster and services.
-   - Create dashboards to visualize key metrics and alerts for potential issues.
-
-3. **Enhance Security (2 hours):**
-   - Apply security best practices such as running containers with the least privilege.
-   - Implement network policies to restrict unnecessary communication between services.
-
-#### Day 5: Testing, Documentation, and Final Touches
+#### Day 4: Testing, Documentation, and Final Touches
 
 1. **Perform Comprehensive Testing (3 hours):**
    - Conduct integration tests to ensure all services work together seamlessly.
