@@ -129,3 +129,7 @@ dist
 .yarn/install-state.gz
 .pnp.*
 /.vagrant
+.DS_Store
+Architecture.png
+kubectl
+*.js
