@@ -133,3 +133,5 @@ dist
 Architecture.png
 kubectl
 *.js
+
+/billing-app
