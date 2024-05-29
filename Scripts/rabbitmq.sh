@@ -17,7 +17,7 @@ apply_rabbitmq_manifest() {
         if [ "$ip_address" != "<none>" ]; then
             break  # Exit the loop if IP address is obtained
         else
-            echo "IP address not available. Retrying..."
+            echo "RabbitMQ address not available. Retrying..."
             sleep 5  # Wait for 5 seconds before retrying
         fi
     done
@@ -32,5 +32,8 @@ apply_rabbitmq_manifest() {
 
     # Update RabbitMQ URL in api-gateway-secret.yaml
     sed -i "" "s|RABBITMQ_URL: .*|RABBITMQ_URL: $rabbitmq_url_base64|g" Manifests/api-gateway/api-gateway-secret.yaml
+    sed -i "" "s|RABBITMQ_URL: .*|RABBITMQ_URL: $rabbitmq_url_base64|g" Manifests/billing-app/billing-app-secret.yaml
+
     echo "api-gateway-secret.yaml updated with new RabbitMQ URL"
+    echo "billing-app-secret.yaml updated with new RabbitMQ URL"
 }
