@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: billing-app-deployment
+  labels:
+    app: billing-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: billing-app
+  template:
+    metadata:
+      labels:
+        app: billing-app
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: agent1-node-3d90d0c5
+      containers:
+      - name: billing-app
+        image: danilocangucu/billing-app:latest
+        ports:
+        - containerPort: 8080
+        env:
+        - name: NODE_USER
+          valueFrom:
+            secretKeyRef:
+              name: billing-app-secret
+              key: NODE_USER
+        - name: BILLING_PORT
+          valueFrom:
+            secretKeyRef:
+              name: billing-app-secret
+              key: BILLING_PORT
+        - name: RABBITMQ_URL
+          valueFrom:
+            secretKeyRef:
+              name: billing-app-secret
+              key: RABBITMQ_URL
+        - name: RABBITMQ_QUEUE
+          valueFrom:
+            secretKeyRef:
+              name: billing-app-secret
+              key: RABBITMQ_QUEUE
+        - name: PG_2_DATABASE
+          valueFrom:
+            secretKeyRef:
+              name: billing-app-secret
+              key: PG_2_DATABASE
+        - name: PG_2_USER
+          valueFrom:
+            secretKeyRef:
+              name: billing-app-secret
+              key: PG_2_USER
+        - name: PG_2_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: billing-app-secret
+              key: PG_2_PASSWORD
+        - name: PGHOST
+          valueFrom:
+            secretKeyRef:
+              name: billing-app-secret
+              key: PGHOST
+        - name: PGPORT
+          valueFrom:
+            secretKeyRef:
+              name: billing-app-secret
+              key: PGPORT
+        volumeMounts:
+        - name: log-volume
+          mountPath: /var/log/billing-app
+      volumes:
+      - name: log-volume
+        emptyDir: {}
+      restartPolicy: Always
