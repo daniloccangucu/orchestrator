@@ -2,7 +2,7 @@
 
 source Scripts/rabbitmq.sh
 source Scripts/api-gateway.sh
-source Scripts/billing-database/billing-database.sh
+source Scripts/billing-database.sh
 
 # Function to create the cluster
 create_cluster() {
