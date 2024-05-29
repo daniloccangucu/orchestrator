@@ -1,7 +1,4 @@
 apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: billing-database-config
 data:
   0-billing-setup.sql: |
     CREATE DATABASE orders;
