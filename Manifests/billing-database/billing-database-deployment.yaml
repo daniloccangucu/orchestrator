@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: billing-database
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: billing-database
+  template:
+    metadata:
+      labels:
+        app: billing-database
+    spec:
+      containers:
+        - name: postgres
+          image: danilocangucu/billing-database:latest
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: billing-database-secret
+                  key: postgres-db
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: billing-database-secret
+                  key: postgres-user
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: billing-database-secret
+                  key: postgres-password
+          volumeMounts:
+            - name: billing-database-storage
+              mountPath: /var/lib/postgresql/data
+            - name: billing-database-config
+              mountPath: /docker-entrypoint-initdb.d
+            - name: pgpassword
+              mountPath: /run/secrets/pgpassword
+              subPath: pgpassword
+      volumes:
+        - name: billing-database-storage
+          persistentVolumeClaim:
+            claimName: billing-database-pvc
+        - name: billing-database-config
+          configMap:
+            name: billing-database-config
+        - name: pgpassword
+          secret:
+            secretName: billing-database-secret
+            items:
+              - key: postgres-password
+                path: pgpassword
