@@ -12,6 +12,8 @@ spec:
       labels:
         app: billing-database
     spec:
+      nodeSelector:
+        kubernetes.io/hostname: agent1-node-3d90d0c5
       containers:
         - name: postgres
           image: danilocangucu/billing-database:latest

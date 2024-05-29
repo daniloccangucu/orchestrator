@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: billing-database
+spec:
+  serviceName: "billing-database"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: billing-database
+  template:
+    metadata:
+      labels:
+        app: billing-database
+    spec:
+      containers:
+      - name: postgres
+        image: danilocangucu/billing-database:latest
+        ports:
+        - containerPort: 5432
+        env:
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: billing-database-secret
+              key: postgres-user
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: billing-database-secret
+              key: postgres-password
+        volumeMounts:
+        - name: pgdata
+          mountPath: /var/lib/postgresql/data
+  volumeClaimTemplates:
+  - metadata:
+      name: pgdata
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 100Mi
