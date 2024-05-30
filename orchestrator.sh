@@ -4,7 +4,8 @@ source Scripts/rabbitmq.sh
 source Scripts/api-gateway.sh
 source Scripts/billing-database.sh
 source Scripts/billing-app.sh
-
+source Scripts/inventory-database.sh
+source Scripts/inventory-app.sh
 
 # Function to create the cluster
 create_cluster() {
@@ -12,7 +13,7 @@ create_cluster() {
     
     vagrant up
 
-    apply_rabbitmq_manifest && apply_apigateway_manifest && apply_billingdatabase_manifest && apply_billingapp_manifest
+    apply_rabbitmq_manifest && apply_billingdatabase_manifest && apply_billingapp_manifest && apply_inventorydatabase_manifest && apply_inventoryapp_manifest && apply_apigateway_manifest
 
     echo "Cluster created"
 }
@@ -21,6 +22,7 @@ create_cluster() {
 stop_cluster() {
     echo "Stopping the cluster..."
 
+    kubectl delete hpa --all
     kubectl delete deployments --all
     kubectl delete statefulsets --all
     kubectl delete services --all
