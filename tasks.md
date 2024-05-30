@@ -41,10 +41,6 @@ Here's a detailed plan to complete the Orchestrator project in 5 days, incorpora
    - Ensure persistent storage is configured correctly for PostgreSQL databases and billing-app.
    - Test the StatefulSets by checking data persistence across pod restarts.
 
-3. **Configure RabbitMQ and API Gateway (2 hours):**
-   - Ensure RabbitMQ is correctly set up and integrated with billing-app.
-   - Verify that the API Gateway is routing requests properly to the respective services.
-
 #### Day 4: Testing, Documentation, and Final Touches
 
 1. **Perform Comprehensive Testing (3 hours):**

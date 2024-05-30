@@ -1,34 +1,50 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: apps/v1                      # Specifies the API version for the Deployment
+kind: Deployment                         # Specifies the type of Kubernetes object
 metadata:
-  name: rabbitmq-deployment
+  name: rabbitmq-deployment              # Name of the Deployment object
   labels:
-    app: rabbitmq
+    app: rabbitmq                        # Labels for categorizing the Deployment
 spec:
-  replicas: 1
+  replicas: 1                            # Number of desired pod replicas
   selector:
     matchLabels:
-      app: rabbitmq
+      app: rabbitmq                      # Selector to match pods with the specified label
   template:
     metadata:
       labels:
-        app: rabbitmq
+        app: rabbitmq                    # Labels applied to the pod template
     spec:
       nodeSelector:
-        kubernetes.io/hostname: agent1-node-3d90d0c5
+        kubernetes.io/hostname: agent1-node-3d90d0c5  # Node selector to schedule pods on a specific node
       containers:
-      - name: rabbitmq
-        image: danilocangucu/rabbitmq:latest
+      - name: rabbitmq                   # Name of the container
+        image: danilocangucu/rabbitmq:latest  # Docker image to use for the container
         ports:
-        - containerPort: 5672
+        - containerPort: 5672            # Port that the container exposes
         env:
         - name: RABBITMQ_USER
           valueFrom:
             secretKeyRef:
               name: rabbitmq-secret
-              key: RABBITMQ_USER
+              key: RABBITMQ_USER         # Environment variable sourced from a Secret
         - name: RABBITMQ_USER_PWD
           valueFrom:
             secretKeyRef:
               name: rabbitmq-secret
-              key: RABBITMQ_USER_PWD
+              key: RABBITMQ_USER_PWD     # Environment variable sourced from a Secret
+
+# - **apiVersion:** Specifies the API version for the Deployment.
+# - **kind:** Defines the type of Kubernetes object.
+# - **metadata:** Contains metadata about the object, including name and labels.
+# - **spec:** Defines the desired state of the Deployment.
+#   - **replicas:** Number of desired pod replicas.
+#   - **selector:** Criteria to match the pods for the Deployment.
+#   - **template:** Template for creating pods.
+#     - **metadata:** Labels applied to the pod template.
+#     - **spec:** Pod specification.
+#       - **nodeSelector:** Specifies the node to run the pod.
+#       - **containers:** List of containers in the pod.
+#         - **name:** Name of the container.
+#         - **image:** Docker image for the container.
+#         - **ports:** Ports exposed by the container.
+#         - **env:** Environment variables sourced from Secrets.

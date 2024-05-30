@@ -1,14 +1,26 @@
-apiVersion: v1
-kind: Service
+
+apiVersion: v1                # Specifies the API version for the Service
+kind: Service                 # Specifies the type of Kubernetes object
 metadata:
-  name: api-gateway-service
+  name: api-gateway-service   # Name of the Service object
   labels:
-    app: api-gateway
+    app: api-gateway          # Labels for categorizing the Service
 spec:
   selector:
-    app: api-gateway
+    app: api-gateway          # Selector to match pods with the specified label
   ports:
-  - protocol: TCP
-    port: 3000
-    targetPort: 3000
-  type: LoadBalancer
+  - protocol: TCP             # Protocol used by the Service
+    port: 3000                # Port exposed by the Service
+    targetPort: 3000          # Port on the pod that the Service forwards traffic to
+  type: LoadBalancer          # Type of Service, creates an external load balancer
+
+# - **apiVersion:** Specifies the API version for the Service.
+# - **kind:** Defines the type of Kubernetes object.
+# - **metadata:** Contains metadata about the object, including name and labels.
+# - **spec:** Defines the desired state of the Service.
+#   - **selector:** Criteria to match the pods for the Service.
+#   - **ports:** List of ports that the Service exposes.
+#     - **protocol:** Protocol used (TCP in this case).
+#     - **port:** Port exposed by the Service.
+#     - **targetPort:** Port on the pod that the Service forwards traffic to.
+#   - **type:** Type of Service (LoadBalancer creates an external load balancer).

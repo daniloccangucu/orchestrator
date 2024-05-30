@@ -1,19 +1,37 @@
-apiVersion: autoscaling/v2
-kind: HorizontalPodAutoscaler
+apiVersion: autoscaling/v2             # Specifies the API version for the HorizontalPodAutoscaler
+kind: HorizontalPodAutoscaler          # Specifies the type of Kubernetes object
 metadata:
-  name: inventory-app-hpa
-  namespace: default
+  name: inventory-app-hpa              # Name of the HorizontalPodAutoscaler object
+  namespace: default                   # Namespace where the HPA is created
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: inventory-app-deployment
-  minReplicas: 1
-  maxReplicas: 3
+    name: inventory-app-deployment     # Reference to the target Deployment to scale
+  minReplicas: 1                       # Minimum number of replicas to scale down to
+  maxReplicas: 3                       # Maximum number of replicas to scale up to
   metrics:
   - type: Resource
     resource:
       name: cpu
       target:
         type: Utilization
-        averageUtilization: 60
+        averageUtilization: 60         # Target average CPU utilization percentage
+
+# - **apiVersion:** Specifies the API version for the HorizontalPodAutoscaler.
+# - **kind:** Defines the type of Kubernetes object.
+# - **metadata:** Contains metadata about the object, including name and namespace.
+# - **spec:** Defines the desired state of the HorizontalPodAutoscaler.
+#   - **scaleTargetRef:** Reference to the target resource to scale.
+#     - **apiVersion:** API version of the target resource.
+#     - **kind:** Type of the target resource.
+#     - **name:** Name of the target resource.
+#   - **minReplicas:** Minimum number of replicas.
+#   - **maxReplicas:** Maximum number of replicas.
+#   - **metrics:** Metrics to use for scaling.
+#     - **type:** Type of metric (Resource in this case).
+#     - **resource:** Resource metric configuration.
+#       - **name:** Name of the resource (cpu in this case).
+#       - **target:** Target configuration.
+#         - **type:** Type of target (Utilization in this case).
+#         - **averageUtilization:** Target average utilization percentage.

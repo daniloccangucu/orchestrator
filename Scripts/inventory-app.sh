@@ -12,7 +12,7 @@ apply_inventoryapp_manifest() {
             break
         else
             echo "inventory-app getting ready..."
-            sleep 5
+            sleep 15
         fi
     done
 

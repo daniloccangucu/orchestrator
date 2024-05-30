@@ -12,7 +12,7 @@ apply_inventorydatabase_manifest() {
             break
         else
             echo "inventory-database getting ready..."
-            sleep 5
+            sleep 15
         fi
     done
 

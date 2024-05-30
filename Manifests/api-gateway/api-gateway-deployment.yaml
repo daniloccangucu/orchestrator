@@ -1,70 +1,89 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: apps/v1                  # Specifies the API version for the Deployment
+kind: Deployment                     # Specifies the type of Kubernetes object
 metadata:
-  name: api-gateway-deployment
+  name: api-gateway-deployment       # Name of the Deployment object
   labels:
-    app: api-gateway
+    app: api-gateway                 # Labels for categorizing the Deployment
 spec:
-  replicas: 1
+  replicas: 1                        # Number of desired pod replicas
   selector:
     matchLabels:
-      app: api-gateway
+      app: api-gateway               # Selector for matching pods with the specified label
   template:
     metadata:
       labels:
-        app: api-gateway
+        app: api-gateway             # Labels applied to the pod template
     spec:
       nodeSelector:
-        kubernetes.io/hostname: agent1-node-3d90d0c5
+        kubernetes.io/hostname: agent1-node-3d90d0c5  # Node selector to schedule pods on a specific node
       containers:
-      - name: api-gateway
-        image: danilocangucu/api-gateway:latest
+      - name: api-gateway            # Name of the container
+        image: danilocangucu/api-gateway:latest  # Docker image to use for the container
         ports:
-        - containerPort: 3000
+        - containerPort: 3000        # Port that the container exposes
         resources:
           requests:
-            cpu: "250m"
+            cpu: "250m"              # Minimum CPU requested
           limits:
-            cpu: "500m"
+            cpu: "500m"              # Maximum CPU limit
         env:
         - name: NODE_USER
           valueFrom:
             secretKeyRef:
               name: api-gateway-secret
-              key: NODE_USER
+              key: NODE_USER          # Environment variable sourced from a Secret
         - name: GATEWAY_PORT
           valueFrom:
             secretKeyRef:
               name: api-gateway-secret
-              key: GATEWAY_PORT
+              key: GATEWAY_PORT        # Environment variable sourced from a Secret
         - name: RABBITMQ_URL
           valueFrom:
             secretKeyRef:
               name: api-gateway-secret
-              key: RABBITMQ_URL
+              key: RABBITMQ_URL        # Environment variable sourced from a Secret
         - name: RABBITMQ_QUEUE
           valueFrom:
             secretKeyRef:
               name: api-gateway-secret
-              key: RABBITMQ_QUEUE
+              key: RABBITMQ_QUEUE      # Environment variable sourced from a Secret
         - name: INVENTORY_API_URL
           valueFrom:
             secretKeyRef:
               name: api-gateway-secret
-              key: INVENTORY_API_URL
+              key: INVENTORY_API_URL   # Environment variable sourced from a Secret
         - name: RABBITMQ_USER
           valueFrom:
             secretKeyRef:
               name: api-gateway-secret
-              key: RABBITMQ_USER
+              key: RABBITMQ_USER       # Environment variable sourced from a Secret
         - name: RABBITMQ_USER_PWD
           valueFrom:
             secretKeyRef:
               name: api-gateway-secret
-              key: RABBITMQ_USER_PWD
+              key: RABBITMQ_USER_PWD   # Environment variable sourced from a Secret
         volumeMounts:
         - name: log-volume
-          mountPath: /var/log/api-gateway
+          mountPath: /var/log/api-gateway  # Mounts a volume to the specified path
       volumes:
       - name: log-volume
-        emptyDir: {}
+        emptyDir: {}                  # Defines an empty directory volume
+
+# - **apiVersion:** Specifies the API version for the Deployment.
+# - **kind:** Defines the type of Kubernetes object.
+# - **metadata:** Contains metadata about the object, including name and labels.
+# - **spec:** Defines the desired state of the Deployment.
+#   - **replicas:** Number of desired pod replicas.
+#   - **selector:** Criteria to match the pods for the Deployment.
+#   - **template:** Template for creating pods.
+#     - **metadata:** Labels applied to the pod template.
+#     - **spec:** Pod specification.
+#       - **nodeSelector:** Specifies the node to run the pod.
+#       - **containers:** List of containers in the pod.
+#         - **name:** Name of the container.
+#         - **image:** Docker image for the container.
+#         - **ports:** Ports exposed by the container.
+#         - **resources:** Resource requests and limits for the container.
+#         - **env:** Environment variables sourced from Secrets.
+#         - **volumeMounts:** Volumes to mount inside the container.
+#       - **volumes:** Volumes available to the pod, such as an empty directory.

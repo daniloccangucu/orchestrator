@@ -1,81 +1,104 @@
-apiVersion: apps/v1
-kind: StatefulSet
+apiVersion: apps/v1                     # Specifies the API version for the StatefulSet
+kind: StatefulSet                       # Specifies the type of Kubernetes object
 metadata:
-  name: billing-app
+  name: billing-app                     # Name of the StatefulSet object
   labels:
-    app: billing-app
+    app: billing-app                    # Labels for categorizing the StatefulSet
 spec:
-  serviceName: "billing-app"
-  replicas: 1
+  serviceName: "billing-app"            # Name of the service governing this StatefulSet
+  replicas: 1                           # Number of desired pod replicas
   selector:
     matchLabels:
-      app: billing-app
+      app: billing-app                  # Selector to match pods with the specified label
   template:
     metadata:
       labels:
-        app: billing-app
+        app: billing-app                # Labels applied to the pod template
     spec:
       nodeSelector:
-        kubernetes.io/hostname: agent1-node-3d90d0c5
+        kubernetes.io/hostname: agent1-node-3d90d0c5  # Node selector to schedule pods on a specific node
       containers:
-      - name: billing-app
-        image: danilocangucu/billing-app:latest
+      - name: billing-app               # Name of the container
+        image: danilocangucu/billing-app:latest  # Docker image to use for the container
         ports:
-        - containerPort: 8080
+        - containerPort: 8080           # Port that the container exposes
         env:
         - name: NODE_USER
           valueFrom:
             secretKeyRef:
               name: billing-app-secret
-              key: NODE_USER
+              key: NODE_USER            # Environment variable sourced from a Secret
         - name: BILLING_PORT
           valueFrom:
             secretKeyRef:
               name: billing-app-secret
-              key: BILLING_PORT
+              key: BILLING_PORT          # Environment variable sourced from a Secret
         - name: RABBITMQ_URL
           valueFrom:
             secretKeyRef:
               name: billing-app-secret
-              key: RABBITMQ_URL
+              key: RABBITMQ_URL          # Environment variable sourced from a Secret
         - name: RABBITMQ_QUEUE
           valueFrom:
             secretKeyRef:
               name: billing-app-secret
-              key: RABBITMQ_QUEUE
+              key: RABBITMQ_QUEUE        # Environment variable sourced from a Secret
         - name: PG_2_DATABASE
           valueFrom:
             secretKeyRef:
               name: billing-app-secret
-              key: PG_2_DATABASE
+              key: PG_2_DATABASE         # Environment variable sourced from a Secret
         - name: PG_2_USER
           valueFrom:
             secretKeyRef:
               name: billing-app-secret
-              key: PG_2_USER
+              key: PG_2_USER             # Environment variable sourced from a Secret
         - name: PG_2_PASSWORD
           valueFrom:
             secretKeyRef:
               name: billing-app-secret
-              key: PG_2_PASSWORD
+              key: PG_2_PASSWORD         # Environment variable sourced from a Secret
         - name: PGHOST
           valueFrom:
             secretKeyRef:
               name: billing-app-secret
-              key: PGHOST
+              key: PGHOST                # Environment variable sourced from a Secret
         - name: PGPORT
           valueFrom:
             secretKeyRef:
               name: billing-app-secret
-              key: PGPORT
+              key: PGPORT                # Environment variable sourced from a Secret
         volumeMounts:
         - name: log-volume
-          mountPath: /var/log/billing-app
+          mountPath: /var/log/billing-app  # Mounts a volume to the specified path
   volumeClaimTemplates:
   - metadata:
       name: log-volume
     spec:
-      accessModes: [ "ReadWriteOnce" ]
+      accessModes: [ "ReadWriteOnce" ]  # Access mode for the volume
       resources:
         requests:
-          storage: 100Mi
+          storage: 100Mi                # Storage request for the volume
+
+# - **apiVersion:** Specifies the API version for the StatefulSet.
+# - **kind:** Defines the type of Kubernetes object.
+# - **metadata:** Contains metadata about the object, including name and labels.
+# - **spec:** Defines the desired state of the StatefulSet.
+#   - **serviceName:** Name of the service governing this StatefulSet.
+#   - **replicas:** Number of desired pod replicas.
+#   - **selector:** Criteria to match the pods for the StatefulSet.
+#   - **template:** Template for creating pods.
+#     - **metadata:** Labels applied to the pod template.
+#     - **spec:** Pod specification.
+#       - **nodeSelector:** Specifies the node to run the pod.
+#       - **containers:** List of containers in the pod.
+#         - **name:** Name of the container.
+#         - **image:** Docker image for the container.
+#         - **ports:** Ports exposed by the container.
+#         - **env:** Environment variables sourced from Secrets.
+#         - **volumeMounts:** Volumes to mount inside the container.
+#   - **volumeClaimTemplates:** Template for persistent volume claims.
+#     - **metadata:** Metadata for the volume claim.
+#     - **spec:** Specification for the volume claim.
+#       - **accessModes:** Access mode for the volume.
+#       - **resources:** Resource requests for the volume.

@@ -1,42 +1,66 @@
-apiVersion: apps/v1
-kind: StatefulSet
+apiVersion: apps/v1                         # Specifies the API version for the StatefulSet
+kind: StatefulSet                           # Specifies the type of Kubernetes object
 metadata:
-  name: billing-database
+  name: billing-database                    # Name of the StatefulSet object
 spec:
-  serviceName: "billing-database"
-  replicas: 1
+  serviceName: "billing-database"           # Name of the service governing this StatefulSet
+  replicas: 1                               # Number of desired pod replicas
   selector:
     matchLabels:
-      app: billing-database
+      app: billing-database                 # Selector to match pods with the specified label
   template:
     metadata:
       labels:
-        app: billing-database
+        app: billing-database               # Labels applied to the pod template
     spec:
       containers:
-      - name: postgres
-        image: danilocangucu/billing-database:latest
+      - name: postgres                      # Name of the container
+        image: danilocangucu/billing-database:latest  # Docker image to use for the container
         ports:
-        - containerPort: 5432
+        - containerPort: 5432               # Port that the container exposes
         env:
         - name: POSTGRES_USER
           valueFrom:
             secretKeyRef:
               name: billing-database-secret
-              key: postgres-user
+              key: postgres-user            # Environment variable sourced from a Secret
         - name: POSTGRES_PASSWORD
           valueFrom:
             secretKeyRef:
               name: billing-database-secret
-              key: postgres-password
+              key: postgres-password        # Environment variable sourced from a Secret
         volumeMounts:
         - name: pgdata
-          mountPath: /var/lib/postgresql/data
+          mountPath: /var/lib/postgresql/data  # Mounts a volume to the specified path
   volumeClaimTemplates:
   - metadata:
       name: pgdata
     spec:
-      accessModes: [ "ReadWriteOnce" ]
+      accessModes: [ "ReadWriteOnce" ]      # Access mode for the volume
       resources:
         requests:
-          storage: 100Mi
+          storage: 100Mi                    # Storage request for the volume
+
+# - **apiVersion:** Specifies the API version for the StatefulSet.
+# - **kind:** Defines the type of Kubernetes object.
+# - **metadata:** Contains metadata about the object, including name.
+# - **spec:** Defines the desired state of the StatefulSet.
+#   - **serviceName:** Name of the service governing this StatefulSet.
+#   - **replicas:** Number of desired pod replicas.
+#   - **selector:** Criteria to match the pods for the StatefulSet.
+#   - **template:** Template for creating pods.
+#     - **metadata:** Labels applied to the pod template.
+#     - **spec:** Pod specification.
+#       - **containers:** List of containers in the pod.
+#         - **name:** Name of the container.
+#         - **image:** Docker image for the container.
+#         - **ports:** Ports exposed by the container.
+#         - **env:** Environment variables sourced from Secrets.
+#         - **volumeMounts:** Volumes to mount inside the container.
+#   - **volumeClaimTemplates:** Template for persistent volume claims.
+#     - **metadata:** Metadata for the volume claim.
+#     - **spec:** Specification for the volume claim.
+#       - **accessModes:** Access mode for the volume.
+#       - **resources:** Resource requests for the volume.
+
+# ---
