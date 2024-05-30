@@ -18,7 +18,7 @@ apply_rabbitmq_manifest() {
             break  # Exit the loop if IP address is obtained
         else
             echo "rabbitmq getting ready..."
-            sleep 5  # Wait for 5 seconds before retrying
+            sleep 15  # Wait for 5 seconds before retrying
         fi
     done
 

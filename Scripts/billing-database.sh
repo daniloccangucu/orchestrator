@@ -18,7 +18,7 @@ apply_billingdatabase_manifest() {
             break  # Exit the loop if IP address is obtained
         else
             echo "billing-database getting ready..."
-            sleep 15  # Wait for 15 seconds before retrying
+            sleep 30  # Wait for 30 seconds before retrying
         fi
     done
 
