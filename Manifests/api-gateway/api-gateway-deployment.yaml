@@ -5,7 +5,7 @@ metadata:
   labels:
     app: api-gateway
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: api-gateway
@@ -21,6 +21,11 @@ spec:
         image: danilocangucu/api-gateway:latest
         ports:
         - containerPort: 3000
+        resources:
+          requests:
+            cpu: "250m"
+          limits:
+            cpu: "500m"
         env:
         - name: NODE_USER
           valueFrom:
@@ -63,4 +68,3 @@ spec:
       volumes:
       - name: log-volume
         emptyDir: {}
-      restartPolicy: Always

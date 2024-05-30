@@ -1,10 +1,11 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
-  name: billing-app-deployment
+  name: billing-app
   labels:
     app: billing-app
 spec:
+  serviceName: "billing-app"
   replicas: 1
   selector:
     matchLabels:
@@ -70,7 +71,11 @@ spec:
         volumeMounts:
         - name: log-volume
           mountPath: /var/log/billing-app
-      volumes:
-      - name: log-volume
-        emptyDir: {}
-      restartPolicy: Always
+  volumeClaimTemplates:
+  - metadata:
+      name: log-volume
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 100Mi
