@@ -11,16 +11,14 @@ apply_inventorydatabase_manifest() {
         if [ "$ip_address" != "<none>" ] && [ -n "$ip_address" ]; then
             break
         else
-            echo "Inventory Database IP address not available. Retrying..."
+            echo "inventory-database getting ready..."
             sleep 5
         fi
     done
 
-    echo "Inventory Database IP: $ip_address"
     ip_address_base64=$(echo -n "$ip_address" | base64)
-    echo "Base64 Encoded Inventory Database IP: $ip_address_base64"
 
     sed -i "" "s|PGHOST: .*|PGHOST: $ip_address_base64|g" Manifests/inventory-app/inventory-app-secret.yaml
 
-    echo "inventory-app-secret.yaml updated with new Inventory Database IP"
+    echo "inventory-database done"
 }

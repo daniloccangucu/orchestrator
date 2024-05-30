@@ -17,23 +17,20 @@ apply_rabbitmq_manifest() {
         if [ "$ip_address" != "<none>" ]; then
             break  # Exit the loop if IP address is obtained
         else
-            echo "RabbitMQ address not available. Retrying..."
+            echo "rabbitmq getting ready..."
             sleep 5  # Wait for 5 seconds before retrying
         fi
     done
 
     # Construct the RabbitMQ URL using the extracted IP address
     rabbitmq_url="amqp://danilo:dan1234@$ip_address:5672"
-    echo "RabbitMQ URL: $rabbitmq_url"
 
     # Encode the RabbitMQ URL to base64
     rabbitmq_url_base64=$(echo -n "$rabbitmq_url" | base64)
-    echo "Base64 Encoded RabbitMQ URL: $rabbitmq_url_base64"
 
     # Update RabbitMQ URL in api-gateway-secret.yaml
     sed -i "" "s|RABBITMQ_URL: .*|RABBITMQ_URL: $rabbitmq_url_base64|g" Manifests/api-gateway/api-gateway-secret.yaml
     sed -i "" "s|RABBITMQ_URL: .*|RABBITMQ_URL: $rabbitmq_url_base64|g" Manifests/billing-app/billing-app-secret.yaml
 
-    echo "api-gateway-secret.yaml updated with new RabbitMQ URL"
-    echo "billing-app-secret.yaml updated with new RabbitMQ URL"
+    echo "rabbitmq done"
 }

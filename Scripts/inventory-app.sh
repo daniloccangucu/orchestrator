@@ -11,17 +11,15 @@ apply_inventoryapp_manifest() {
         if [ "$ip_address" != "<none>" ] && [ -n "$ip_address" ]; then
             break
         else
-            echo "Inventory App IP address not available. Retrying..."
+            echo "inventory-app getting ready..."
             sleep 5
         fi
     done
 
-    echo "Inventory App IP: $ip_address"
     inventory_api_url="http://$ip_address:8080/movies"
     inventory_api_url_base64=$(echo -n "$inventory_api_url" | base64)
-    echo "Base64 Encoded Inventory API URL: $inventory_api_url_base64"
 
     sed -i "" "s|INVENTORY_API_URL: .*|INVENTORY_API_URL: $inventory_api_url_base64|g" Manifests/api-gateway/api-gateway-secret.yaml
 
-    echo "api-gateway-secret.yaml updated with new Inventory API URL"
+    echo "inventory-app done"
 }
