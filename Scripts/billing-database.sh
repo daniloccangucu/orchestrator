@@ -28,5 +28,5 @@ apply_billingdatabase_manifest() {
     # Update PGHOST in billing-app-secret.yaml
     sed -i "" "s|PGHOST: .*|PGHOST: $ip_address_base64|g" Manifests/billing-app/billing-app-secret.yaml
 
-    echo ""billing-database done"
+    echo "billing-database done"
 }
