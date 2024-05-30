@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: inventory-database
+spec:
+  serviceName: "inventory-database"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: inventory-database
+  template:
+    metadata:
+      labels:
+        app: inventory-database
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: agent1-node-3d90d0c5
+      containers:
+      - name: postgres
+        image: danilocangucu/inventory-database:latest
+        ports:
+        - containerPort: 5432
+        env:
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: inventory-database-secret
+              key: postgres-user
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: inventory-database-secret
+              key: postgres-password
+        volumeMounts:
+        - name: pgdata
+          mountPath: /var/lib/postgresql/data
+  volumeClaimTemplates:
+  - metadata:
+      name: pgdata
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 100Mi

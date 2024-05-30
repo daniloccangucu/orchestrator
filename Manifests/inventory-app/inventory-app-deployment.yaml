@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: inventory-app-deployment
+  labels:
+    app: inventory-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: inventory-app
+  template:
+    metadata:
+      labels:
+        app: inventory-app
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: agent1-node-3d90d0c5
+      containers:
+      - name: inventory-app
+        image: danilocangucu/inventory-app:latest
+        ports:
+        - containerPort: 8080
+        resources:
+          requests:
+            cpu: "250m"
+          limits:
+            cpu: "500m"
+        env:
+        - name: PGDATABASE
+          valueFrom:
+            secretKeyRef:
+              name: inventory-app-secret
+              key: PGDATABASE
+        - name: PGUSER
+          valueFrom:
+            secretKeyRef:
+              name: inventory-app-secret
+              key: PGUSER
+        - name: PGPASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: inventory-app-secret
+              key: PGPASSWORD
+        - name: PGPORT
+          valueFrom:
+            secretKeyRef:
+              name: inventory-app-secret
+              key: PGPORT
+        - name: PGHOST
+          valueFrom:
+            secretKeyRef:
+              name: inventory-app-secret
+              key: PGHOST
+        - name: INVENTORY_PORT
+          valueFrom:
+            secretKeyRef:
+              name: inventory-app-secret
+              key: INVENTORY_PORT
+        volumeMounts:
+        - name: log-volume
+          mountPath: /var/log/inventory-app
+      volumes:
+      - name: log-volume
+        emptyDir: {}
